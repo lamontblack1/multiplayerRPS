@@ -33,6 +33,7 @@ var firebaseConfig = {
   let otherPlayerChoice, myChoice = ""
   let otherPlayerWins, otherPlayerLosses, myWins, myLosses = 0
   let myTurn = false
+  let myName = ""
 
 
 //on buttons push
@@ -58,62 +59,64 @@ $("#btnStart").on("click", function(event) {
     }
   })
 
-db.ref("player1").on("value", function(snap) {
-  console.log("player1 value event")
-  console.log(snap.val().playerName)
-  if (myPlayerId === "player1") {
-    myChoice = snap.val().playerChoice;
-    myWins = snap.val().playerWins
-    myLosses = snap.val().playerLosses
+db.ref("/player1").on("value", function(snap) {
+  if (snap.exists()) {
+
+    // console.log(snap.val().playerName)
+    console.log("player1 value event")
+    if (myPlayerId === "player1") {
+      myChoice = snap.val().playerChoice;
+      myWins = snap.val().playerWins
+      myLosses = snap.val().playerLosses
+    }
+    
+    if (myPlayerId === "player2") {
+      otherPlayerChoice = snap.val().playerChoice;
+      otherPlayerWins = snap.val().playerWins
+      otherPlayerLosses = snap.val().playerLosses
+    }
     
     //update display
     $("#player1Name").text(snap.val().playerName)
-    $("#player1WinsLosses").text("wins: " + myWins + "    Losses: " + myLosses)
+    $("#player1WinsLosses").text("wins: " + snap.val().playerWins + "    Losses: " + snap.val().playerLosses)
+    //if both choices have been made then see who won
+    if ((myChoice !== "") && (otherPlayerChoice !== "")) {
+      console.log("both players have chosen")
+    };
   }
-
-  if (myPlayerId === "player2") {
-    otherPlayerChoice = snap.val().playerChoice;
-    otherPlayerWins = snap.val().playerWins
-    otherPlayerLosses = snap.val().playerLosses
-    
-    //update display
-    $("#player1Name").text(snap.val().playerName)
-    $("#player1WinsLosses").text("wins: " + otherPlayerWins + "    Losses: " + otherPlayerLosses)
-  }
-
-  //if both choices have been made then see who won
-  if ((myChoice !== "") && (otherPlayerChoice !== "")) {
-    console.log("both players have chosen")
-  };
 });
 
-db.ref("player2").on("value", function(snap) {
-  console.log("player2 value event")
-  console.log(snap.val().playerName)
-  if (myPlayerId === "player1") {
-    otherPlayerChoice = snap.val().playerChoice;
-    otherPlayerWins = snap.val().playerWins
-    otherPlayerLosses = snap.val().playerLosses
-    
-    //update display
-    $("#player2Name").text(snap.val().playerName)
-    $("#player2WinsLosses").text("wins: " + otherPlayerWins + "    Losses: " + otherPlayerLosses)
-  }
+db.ref("/player2").on("value", function(snap) {
+  if (snap.exists()) {
 
-  if (myPlayerId === "player2") {
-    myChoice = snap.val().playerChoice;
-    myWins = snap.val().playerWins
-    myLosses = snap.val().playerLosses
-    
-    //update display
-    $("#player2Name").text(snap.val().playerName)
-    $("#player2WinsLosses").text("wins: " + myWins + "    Losses: " + myLosses)
+    console.log("player2 value event")
+    // console.log(snap.val().playerName)
+    if (myPlayerId === "player1") {
+      otherPlayerChoice = snap.val().playerChoice;
+      otherPlayerWins = snap.val().playerWins
+      otherPlayerLosses = snap.val().playerLosses
+      
+    }
+  
+    if (myPlayerId === "player2") {
+      myChoice = snap.val().playerChoice;
+      myWins = snap.val().playerWins
+      myLosses = snap.val().playerLosses
+      
+    }
+  
+    $(".choice-button").attr("style","visibility: visible;")
+  $(".wins-losses").attr("style","visibility: visible;")
+  
+      //update display
+      $("#player2Name").text(snap.val().playerName);
+      $("#player2WinsLosses").text("wins: " + snap.val().playerWins + "    Losses: " + snap.val().playerLosses)
+    console.log(myChoice, otherPlayerChoice)
+    if ((myChoice !== "") && (otherPlayerChoice !== "")) {
+      console.log("both players have chosen")
+    };
   }
-
-  if ((myChoice !== "") && (otherPlayerChoice !== "")) {
-    console.log("both players have chosen")
-  };
-})
+});
 
 function updateCurrentPlayerInfo(choice, wins, losses) {
   db.ref("/" + myPlayerId).set({
@@ -170,18 +173,25 @@ connectionsListRef.on("value", function(snap) {
   intConnections = snap.numChildren()
   console.log("connections: " + intConnections)
   //If this instance is first connection, it is player1, if second connection, player2. otherwise too many people
-  
-      if (intConnections === 1) {
-        myPlayerId = "player1"
-        //update you are player
-        //disable other player buttons
-      }
-      else if (intConnections === 2) {
-        myPlayerId = "player2"
-      }
-      else {
-        alert("Too many players, you just get to watch")
-      }
+  if (myPlayerId === "") {
+    //reset player info if this is the first user logging on
+    if (intConnections === 1) {
+      myPlayerId = "player1"
+      db.ref("/player1").remove()
+      db.ref("/player2").remove()
+      updateCurrentPlayerInfo(myChoice,myWins,myLosses)
+      //update you are player
+      //disable other player buttons
+    }
+    else if (intConnections === 2) {
+      myPlayerId = "player2"
+      updateCurrentPlayerInfo(myChoice,myWins,myLosses)
+    }
+    else if (intConnections > 2) {
+      alert("Too many players, you just get to watch")
+    }
+
+  }
     
 });
 
