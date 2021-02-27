@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CDN-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <!-- local stylesheet -->
+    <link rel="stylesheet" type="text/css" href="./assets/css/stylesheet.css">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Firebase Core JavaScript Link -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+    <!-- Specific Firebase products we want (Database) -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-database.js"></script>
+    <!-- moment.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+
+    <title>Multiplayer RPS</title>
+</head>
+<body>
+    <header><h1>Rock Paper Scissors</h1></header>
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div id="userInfoDiv" class="col-md-6 text-center">   
+                <div class="input-group mb-3">
+                    <input type="text" id="nameInput" class="form-control" placeholder="Your name" aria-label="Your name" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary font-weight-bold" type="button" id="btnStart">S t a r t</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+
+        <div class="row mt-4">
+            <div id="player1Box" class="col-md-3 text-center border player-box">
+               <h3 id="player1Name">Waiting for Player 1</h3> 
+               <button id="1Rock" type="button" class="btn btn-secondary choice-button my-2">Rock</button><br>
+               <button id="1Paper" type="button" class="btn btn-secondary choice-button my-2">Paper</button><br>
+               <button id="1Scissors" type="button" class="btn btn-secondary choice-button my-2">Scissors</button><br>
+               <p id="player1WinsLosses" class="wins-losses">wins: 0 Losses: 0</p>
+            </div>
+            <div id="resultsBox" class="col-md-3 text-center border player-box">
+                
+            </div>
+            <div id="player2Box" class="col-md-3 text-center border player-box">
+                <h3 id="player2Name">Waiting for Player 2</h3> 
+               <button id="2Rock" type="button" class="btn btn-secondary choice-button my-2">Rock</button><br>
+               <button id="2Paper" type="button" class="btn btn-secondary choice-button my-2">Paper</button><br>
+               <button id="2Scissors" type="button" class="btn btn-secondary choice-button my-2">Scissors</button><br>
+               <p id="player2WinsLosses" class="wins-losses">wins: 0 Losses: 0</p>
+            </div>
+        </div>
+
+        <div class="container mt-3">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 text-center">   
+                    <!-- put list box here, and input and send button below -->
+                    <textarea class="form-control mb-2" id="messagesBox" rows="6"></textarea>
+                    <div class="input-group mb-3">
+                        <input type="text" id="messageInput" class="form-control" placeholder="Your message" aria-label="Your message" aria-describedby="button-addon2">
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary font-weight-bold" type="button" id="btnSend">S e n d</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+    
+
+
+
+    </div>
+
+
+    <script src="./assets/javascript/logic.js"></script>
+</body>
+</html>

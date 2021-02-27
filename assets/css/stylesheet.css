@@ -1,0 +1,17 @@
+header {
+    background-color: aqua; 
+    text-align: center;
+    padding: 10px 0 10px;
+}
+    
+.player-box {
+    height: 250px;
+    border-width: 5px;
+    border-style: solid;
+}
+
+.choice-button, .wins-losses {
+    visibility: hidden;
+}
+
+
